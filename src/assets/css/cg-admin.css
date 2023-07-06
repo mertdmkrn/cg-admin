@@ -11315,3 +11315,20 @@ body.sidebar-toggled footer.sticky-footer {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+}
+
+input[type="color"]:focus{
+  outline: none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+}

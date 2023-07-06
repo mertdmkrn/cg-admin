@@ -19,7 +19,7 @@
                     <td class="text-center align-middle">{{ service.name }}</td>
                     <td class="text-center align-middle">{{ service.nameEn }}</td>
                     <td class="text-center align-middle">{{ service.className }}</td>
-                    <td class="text-center align-middle"><span style="padding: 5px; color: #fff;" :style="{backgroundColor: '#' + service.colorCode }">{{ service.colorCode }}</span></td>
+                    <td class="text-center align-middle"><span style="padding: 5px; color: #fff;" :style="{backgroundColor: service.colorCode }">{{ service.colorCode }}</span></td>
                     <td class="text-center align-middle">
                         <router-link style="color: #FFBF00;" class="nav-link" :to="'/service/edit/' + service.id" >
                             <i class="fa-solid fa-edit"></i>

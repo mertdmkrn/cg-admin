@@ -20,8 +20,11 @@
         </div>
         <div class="form-group row">
             <label for="colorCode" class="col-sm-2 col-form-label">Color Code</label>
-            <div class="col-sm-10">
-            <input type="text" v-model="this.service.colorCode" class="form-control" id="colorCode">
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="colorCode" v-model="this.service.colorCode">
+            </div>
+            <div class="col-sm-1">
+                <input type="color" :style="{backgroundColor : `${this.service.colorCode}`}" v-model="this.service.colorCode" class="form-control">
             </div>
         </div>
         <div class="form-group row">
@@ -53,7 +56,7 @@ export default {
                 name : null,
                 nameEn : null,
                 className : null,
-                colorCode : null,
+                colorCode : "#ffffff",
                 sortOrder : 1
             },
             alerts : [],
