@@ -34,6 +34,11 @@ const routes = [
         component : () => import("../views/User/Index.vue")
     },
     {
+        name : "ADD ADMIN",
+        path : "/user/add",
+        component : () => import("../views/User/Items/AddAdmin.vue")
+    },
+    {
         name : "CAMPAIGNS",
         path : "/campaigns",
         component : () => import("../views/Campaign/Index.vue")
@@ -62,6 +67,11 @@ const routes = [
         name : "EDIT SERVICE",
         path : "/service/edit/:id",
         component : () => import("../views/Service/Edit.vue")
+    },
+    {
+        name : "EDIT PROFILE",
+        path : "/profile",
+        component : () => import("../views/Profile/Index.vue")
     },
 ]
 

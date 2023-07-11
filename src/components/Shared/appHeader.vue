@@ -37,15 +37,16 @@
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ this.$store.state.user?.fullName }}</span>
-                    <i class="fa-solid fa-user"></i>
+                    <img v-if="this.$store.state.user?.imageUrl != null" :src="this.$store.state.user?.imageUrl" width="35" style="border-radius: 17.5px;">
+                    <i v-else class="fa-solid fa-user"></i>
                 </a>
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">
+                    <router-link class="dropdown-item" to="/profile">
                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                         Profile
-                    </a>
+                    </router-link>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" data-toggle="modal" @click="this.onLogout">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

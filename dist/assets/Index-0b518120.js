@@ -1,0 +1,1 @@
+import{_ as e,o as s,c}from"./index-f69e2805.js";const n={},o={class:"row"};function t(r,_){return s(),c("div",o," Business Page Under Construction... ")}const d=e(n,[["render",t]]);export{d as default};
