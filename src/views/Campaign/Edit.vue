@@ -1,13 +1,23 @@
 <template>  
     <form v-if="this.isShowForm">
         <div class="form-group row">
+            <label for="businessId" class="col-sm-2 col-form-label">Upload Image</label>
+            <div class="col-sm-8 mb-2">
+                <div v-show="isLoading" class="loader"></div>
+                <input v-show="!isLoading" class="file-upload" ref="file" type="file" accept="image/*" @change="previewFiles"/>
+            </div>
+            <div v-if="this.file != null" class="col-sm-2">
+                <button class="btn btn-success" style="float: right;" @click="fileUpload">Upload</button>
+            </div>
+        </div>
+        <div class="form-group row">
             <label for="businessId" class="col-sm-2 col-form-label">Business</label>
             <div class="col-sm-10">
                 <ModelListSelect v-if="this.campaign != null"
                      :list="this.businesses"
                      v-model="this.campaign.businessId"
-                     option-value="id"
-                     option-text="name"
+                     option-value="item1"
+                     option-text="item2"
                      id="businessId"
                      placeholder="Select Business">
                 </ModelListSelect>
@@ -42,7 +52,7 @@
         <div class="form-group row">
             <div class="col-sm-12">
                 <div v-show="isLoading" class="loader"></div>
-                <a @click="this.saveCampaign()" v-show="!isLoading" class="btn btn-success float-sm-right">Save</a>
+                <a @click="this.saveCampaign()"  style="float: right;" v-show="!isLoading" class="btn btn-success float-sm-right">Save</a>
             </div>
         </div>
     </form>
@@ -65,7 +75,7 @@ export default {
         return {
             campaign: {
                 id: "00000000-0000-0000-0000-000000000000",
-                businessId: "00000000-0000-0000-0000-000000000000",
+                businessId: null,
                 path: null,
                 url: null,
                 isActive: false,
@@ -73,11 +83,12 @@ export default {
             },
             businesses: [
                 {
-                    id: "00000000-0000-0000-0000-000000000000",
-                    name: "NULL",
+                    item1: "00000000-0000-0000-0000-000000000000",
+                    item2: "NULL",
                 }
             ],
             alerts: [],
+            file: null,
             isLoading: true,
             isShowForm: true,
             hasError: false
@@ -93,7 +104,13 @@ export default {
             this.isLoading = false;
         }
     },
+    mounted() {
+        this.getBusinessSelectList();
+    },
     methods: {
+        previewFiles() {
+            this.file = this.$refs.file.files[0];
+        },
         async getCampaign(id) {
             await this.$appAxios.post("/campaign/getbyid", id).then(response => {
                 this.isLoading = false;
@@ -160,6 +177,52 @@ export default {
             {
                 this.$router.push({ path: "/campaigns" });
             }
+        },
+        async fileUpload() {
+            this.alerts = [];
+            this.hasError = false;
+            this.isLoading = true;
+
+            const formData = new FormData();
+            formData.append("file", this.file)
+
+            await this.$appAxios.post("/admin/uploadfile", formData, { headers: { "Authorization": `Bearer ${this._token}`, "Content-Type": "multipart/form-data" } }).then(response => {
+                this.isLoading = false;
+
+                debugger;
+                var response = response.data;
+                if(response.hasError)
+                {
+                    this.hasError = true;
+                    alert(response.message);
+                }
+                else{
+                    this.campaign.path = response.data;
+                    this.file = null;
+                }  
+                    
+                }).catch(e => { this.hasError = true; alert("Error : " + e.message); this.isLoading = false; });
+            
+
+            if(!this.hasError)
+            {
+                alert("Resim başarılı bir şekilde yüklenmiştir");
+            }
+        },
+        async getBusinessSelectList() {
+            await this.$appAxios.post("/business/selectlist", null, { headers: { "Authorization": `Bearer ${this._token}` } }).then(response => {
+                this.isLoading = false;
+
+                if(response.hasError == true || response.data.data == null)
+                {
+                    this.isShowForm = false;
+                    alert(response.data.message);
+                }
+                else{
+                    this.businesses = response.data.data;
+                }
+
+            }).catch(e => { alert("Error : " + e.message); });
         }
     },
     computed: {

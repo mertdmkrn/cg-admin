@@ -1,0 +1,1 @@
+import{_ as e,o as c,c as n}from"./index-8bb4651f.js";const o={},t={class:"row"};function r(s,a){return c(),n("div",t," Rating Page Under Construction... ")}const d=e(o,[["render",r]]);export{d as default};

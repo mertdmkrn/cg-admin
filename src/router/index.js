@@ -81,7 +81,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    debugger;
     const authNotRequiredRoutes = ["LOGİN"];
     const _isAuthenticated = store.getters._isAuthenticated; 
 
