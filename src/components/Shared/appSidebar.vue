@@ -70,6 +70,13 @@
             </router-link>
         </li>
 
+        <li class="nav-item" :class="this.$route.name == 'FAQ' ? 'active' : ''">
+            <router-link class="nav-link" to="/faq">
+                <i class="fa-solid fa-question"></i>                
+                <span>FAQ</span>
+            </router-link>
+        </li>
+
         <hr class="sidebar-divider">
 
         <div class="text-center d-none d-md-inline">

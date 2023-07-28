@@ -73,6 +73,21 @@ const routes = [
         path : "/profile",
         component : () => import("../views/Profile/Index.vue")
     },
+    {
+        name : "FAQ",
+        path : "/faq",
+        component : () => import("../views/Faq/Index.vue")
+    },
+    {
+        name : "ADD FAQ",
+        path : "/faq/edit",
+        component : () => import("../views/Faq/Edit.vue")
+    },
+    {
+        name : "EDIT FAQ",
+        path : "/faq/edit/:id",
+        component : () => import("../views/Faq/Edit.vue")
+    },
 ]
 
 const router = createRouter({
