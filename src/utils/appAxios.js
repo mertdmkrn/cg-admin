@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const appAxios = axios.create({
-    baseURL: "https://care-garden-d6bba986d349.herokuapp.com",
+    baseURL: "https://caregarden-71817683236b.herokuapp.com",
     headers: {
       "Content-Type": "application/json",
       "Language" : "tr"
