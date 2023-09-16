@@ -1534,7 +1534,7 @@ pre code {
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: #fefefe;
 }
 
 .table-hover tbody tr:hover {
@@ -4040,7 +4040,39 @@ input[type="button"].btn-block {
 }
 
 .nav-tabs {
-  border-bottom: 1px solid #dddfeb;
+  padding-bottom: 5px;
+  border: 1px solid #dddfeb;
+  width: 100%;
+  border-top-left-radius: 0.35rem;
+  border-top-right-radius: 0.35rem;
+}
+
+.nav-tabs li{
+  display: block;
+  margin-top: 16px;
+}
+
+.nav-tabs li a{
+  padding: 16px 20px 6px 20px;
+  color: #bce;
+}
+
+.nav-tabs li a:hover
+{
+  color: #fff;
+  background: #4e73df;
+  text-decoration: none;
+  border-top-left-radius: 0.35rem;
+  border-top-right-radius: 0.35rem;
+}
+
+.nav-tabs li .active{
+  border: 1px solid #dddfeb;
+  color: #fff;
+  background: #4e73df;
+  border-bottom: 0px;
+  border-top-left-radius: 0.35rem;
+  border-top-right-radius: 0.35rem;
 }
 
 .nav-tabs .nav-link {
@@ -4097,7 +4129,14 @@ input[type="button"].btn-block {
 }
 
 .tab-content > .tab-pane {
+  padding: 10px;
   display: none;
+  background: transparent;
+  min-height: 480px;
+  border: 1px solid #dddfeb;
+  border-bottom-left-radius: 0.35rem;
+  border-bottom-right-radius: 0.35rem;
+  margin-bottom: 25px;
 }
 
 .tab-content > .active {
@@ -9826,8 +9865,8 @@ a:focus {
 .container-md,
 .container-lg,
 .container-xl {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .scroll-to-top {

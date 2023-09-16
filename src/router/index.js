@@ -19,6 +19,11 @@ const routes = [
         component : () => import("../views/Business/Index.vue")
     },
     {
+        name : "EDIT BUSINESS",
+        path : "/business/edit/:id",
+        component : () => import("../views/Business/Edit.vue")
+    },
+    {
         name : "PAYMENTS",
         path : "/payments",
         component : () => import("../views/Payment/Index.vue")
