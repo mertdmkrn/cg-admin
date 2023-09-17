@@ -75,9 +75,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div v-show="isLoading" class="loader"></div>
-                        <a @click="saveBusiness()" v-if="!isLoading" class="btn btn-primary">Save</a>
-                        <a @click="saveBusiness()" v-else-if="!isLoading" class="btn btn-warning">Update</a>
+                        <div v-show="saveLoading" class="loader"></div>
+                        <a @click="saveBusiness()" v-if="!saveLoading" class="btn btn-primary">Save</a>
                     </div>
                 </div>
             </div>
@@ -105,6 +104,7 @@ export default {
                 isOnlyNotActive: false
             },
             isLoading: true,
+            saveLoading: true,
             workingGenderTypeList: ["Everyone", "Female", "Male", "All"]
         }
     },
@@ -127,10 +127,10 @@ export default {
         },
         async saveBusiness()
         {
-            this.isLoading = true;
+            this.saveLoading = true;
 
             await this.$appAxios.post("/business/save", this.editBusiness, {headers: { 'Authorization': `Bearer ${this._token}` }}).then(response => {
-                this.isLoading = false;
+                this.saveLoading = false;
                 var response = response.data;
                 var message = response.message;
 
@@ -158,13 +158,17 @@ export default {
             if(confirm("Do you want to delete the record?!")){
                 await this.$appAxios.post("/business/delete", item, {headers: { 'Authorization': `Bearer ${this._token}` }}).then(response => {
                   
-                    var index = this.businesses.indexOf(item);
-                    if(index > -1)
-                    {
-                        this.businesses.splice(index, 1);
-                        this.records--;
-                    }
+                    alert(response.data.message);
 
+                    if(!response.data.hasError)
+                    {
+                        var index = this.businesses.indexOf(item);
+                        if(index > -1)
+                        {
+                            this.businesses.splice(index, 1);
+                            this.records--;
+                        }
+                    }
                 }).catch(e => { alert(e.message); });
             }
         }

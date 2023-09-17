@@ -227,7 +227,7 @@
     </div>
     <div id="service" class="tab-pane fade">
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Service</th>
@@ -546,7 +546,7 @@ export default {
                 {
                     this.setWorkingInput(this.business.workingInfos[0]);
                 }
-                
+
                 this.isLoading = false;
             }).catch(e => { alert(e.message); this.$router.push({ path: "/businesses" }); });
         },
