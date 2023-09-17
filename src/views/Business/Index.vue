@@ -104,7 +104,7 @@ export default {
                 isOnlyNotActive: false
             },
             isLoading: true,
-            saveLoading: true,
+            saveLoading: false,
             workingGenderTypeList: ["Everyone", "Female", "Male", "All"]
         }
     },
