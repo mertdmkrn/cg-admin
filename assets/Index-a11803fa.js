@@ -1,0 +1,1 @@
+import{_ as n,r as o,o as r,c as s,k as e,f as a,h as c,F as _}from"./index-f8c3b899.js";const l={};function d(u,f){const t=o("router-link");return r(),s(_,null,[e(" User Page Under Construction... "),a(t,{to:"/user/add",class:"btn btn-success float-right"},{default:c(()=>[e(" ADD ADMIN ")]),_:1})],64)}const m=n(l,[["render",d]]);export{m as default};
