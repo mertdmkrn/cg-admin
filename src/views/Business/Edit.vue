@@ -1,10 +1,19 @@
 <template>
-  <ul class="nav nav-tabs">
+  <ul class="d-none d-lg-flex nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#generalinformation" class="active">GENERAL INFORMATION</a></li>
     <li><a data-toggle="tab" href="#workinginfo">WORKING INFO</a></li>
-    <li><a data-toggle="tab" href="#service">SERVICE</a></li>
+    <li><a data-toggle="tab" href="#service">SERVICES</a></li>
     <li><a data-toggle="tab" href="#gallery">GALLERY</a></li>
     <li><a data-toggle="tab" href="#personal">PERSONAL</a></li>
+    <li><a data-toggle="tab" href="#properties">SETTINGS</a></li>
+  </ul>
+  <ul class="d-flex d-lg-none nav nav-tabs" style="font-size: 21.5px;">
+    <li class="active"><a data-toggle="tab" href="#generalinformation" class="active"><i class="fa-solid fa-circle-info"></i></a></li>
+    <li><a data-toggle="tab" href="#workinginfo"><i class="fa-solid fa-calendar-check"></i></a></li>
+    <li><a data-toggle="tab" href="#service"><i class="fa-solid fa-scissors"></i></a></li>
+    <li><a data-toggle="tab" href="#gallery"><i class="fa-solid fa-images"></i></a></li>
+    <li><a data-toggle="tab" href="#personal"><i class="fa-solid fa-user-tie"></i></a></li>
+    <li><a data-toggle="tab" href="#properties"><i class="fa-solid fa-gears"></i></a></li>
   </ul>
 
   <div v-show="isLoading" class="loader"></div>
@@ -465,6 +474,64 @@
             </div>
         </div>
     </div>
+    <div id="properties" class="tab-pane fade">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                        <th style="width:40px"><a class="btn btn-success btn-user btn-block" @click="editProperties = {}" data-toggle="modal" data-target="#editPropertiesModal"><i class="fa-solid fa-plus"></i></a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in this.business.properties" :key="item.id">
+                        <td class="text-center align-middle">{{ item.key }}</td>
+                        <td class="text-center align-middle">{{ item.value }}</td>
+                        <td class="text-center align-middle">
+                            <a style="color: #FFBF00;" class="nav-link" @click="editProperties = item" data-toggle="modal" data-target="#editPropertiesModal">
+                                <i class="fa-solid fa-edit"></i>
+                            </a>
+                            <a style="color: #DE3163;" class="nav-link" @click="deleteProperties(item)">
+                                <i class="fa-solid fa-trash"></i>
+                           </a>                                
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="editPropertiesModal" tabindex="-1" role="dialog" aria-labelledby="editPropertiesModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editPropertiesModalLabel">{{ editProperties.id != null ? 'Edit' : 'Add' }} Service</h5>
+                        <a type="a" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="key">Key</label>
+                                <input type="text" v-model="editProperties.key" class="form-control" id="key">                 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="value">Value</label>
+                                <input type="text" v-model="editProperties.value" class="form-control" id="value">                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div v-show="saveLoading" class="loader"></div>
+                        <a v-if="editProperties.id == null && !saveLoading" class="btn btn-primary" @click="saveProperties()">Save</a>
+                        <a v-else-if="editProperties.id != null && !saveLoading" class="btn btn-warning" @click="saveProperties()">Update</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -515,6 +582,7 @@ export default {
         isAvailable: true
       },
       editWorker: {},
+      editProperties: {},
       gallery: {
         imageUrl: null,
         isProfilePhoto: false
@@ -730,6 +798,49 @@ export default {
                 }
 
             }).catch(e => { alert("Error : " + e.message); });
+        },
+        async saveProperties()
+        {
+            this.saveLoading = true;
+            var isSave = this.editProperties.id == null;
+
+            var requestUrl = isSave ? "/businessproperties/save" : "/businessproperties/update";
+            
+            if(isSave)
+            {
+                this.editProperties.id = "00000000-0000-0000-0000-000000000000"
+            }
+                
+            this.editProperties.businessId = this.business.id;
+
+            await this.$appAxios.post(requestUrl, this.editProperties, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+
+                if(isSave)
+                {
+                    this.business.properties.push(response.data.data);
+                }
+                else 
+                {
+                    var index = this.business.properties.indexOf(x => x.id == this.editService.id);
+                    this.business.properties.splice(index, response.data.data);
+                }
+
+                $("#editPropertiesModal").modal("hide");
+                this.saveLoading = false;
+                alert(response.data.message);
+
+            }).catch(e => { alert(e.message); this.saveLoading = false; });
+        },
+        async deleteProperties(item)
+        {
+            if(confirm("Do you want to delete the record?!"))
+            {
+                await this.$appAxios.post("/businessproperties/delete", item, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+                    this.saveLoading = false;
+                    alert(response.data.message);
+                    this.business.properties = this.business.properties.filter(x => x.id != item.id);
+                }).catch(e => { alert(e.message); this.saveLoading = false; });
+            }
         },
         setWorkingInput(workingInfo)
         {
