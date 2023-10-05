@@ -5,6 +5,15 @@ $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
     };
   });
 
+  $(".nav-item").on('click', function(e) {
+    if ($(window).width() < 760 && !$(".sidebar").hasClass("toggled")) {
+      setTimeout(function(){
+        $("body").addClass("sidebar-toggled");
+        $(".sidebar").addClass("toggled");
+      }, 200)
+    };
+  });
+
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function() {
     if ($(window).width() < 768) {

@@ -67,8 +67,6 @@ export default {
 
             await this.$appAxios.post("/admin/save", this.admin, { headers: { "Authorization": `Bearer ${this._token}` } }).then(response => {
                 this.isLoading = false;
-
-                debugger;
                 var response = response.data;
                 if(response.hasError && response.validationErrors.length > 0)
                 {

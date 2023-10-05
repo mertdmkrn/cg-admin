@@ -189,7 +189,6 @@ export default {
             await this.$appAxios.post("/admin/uploadfile", formData, { headers: { "Authorization": `Bearer ${this._token}`, "Content-Type": "multipart/form-data" } }).then(response => {
                 this.isLoading = false;
 
-                debugger;
                 var response = response.data;
                 if(response.hasError)
                 {

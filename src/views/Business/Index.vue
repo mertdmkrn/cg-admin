@@ -179,8 +179,6 @@ export default {
             this.searchModel.page = this.page - 1;
             this.searchModel.take = this.perPage;
 
-            debugger;
-
             await this.$appAxios.post("/admin/getbusinesssearch", this.searchModel, {headers: { 'Authorization': `Bearer ${this._token}` }}).then(response => {
                 this.businesses = response.data.data;
                 this.records = this.businesses.length > 0 ? this.businesses[0].itemCount : 0;
