@@ -242,8 +242,6 @@
                         <th>Service</th>
                         <th>Name</th>
                         <th>NameEn</th>
-                        <th>Spot</th>
-                        <th>SpotEn</th>
                         <th>Duration</th>
                         <th>Price</th>
                         <th style="width:40px"><a class="btn btn-success btn-user btn-block" @click="editService = {}" data-toggle="modal" data-target="#editServiceModal"><i class="fa-solid fa-plus"></i></a></th>
@@ -254,8 +252,6 @@
                         <td class="text-center align-middle">{{ services.find(x => x.id == item.serviceId).nameEn }}</td>
                         <td class="text-center align-middle">{{ item.name }}</td>
                         <td class="text-center align-middle">{{ item.nameEn }}</td>
-                        <td class="text-center align-middle">{{ item.spot }}</td>
-                        <td class="text-center align-middle">{{ item.spotEn }}</td>
                         <td class="text-center align-middle">{{ item.minDuration }}{{ item.maxDuration > item.minDuration ? ' - ' + item.maxDuration : '' }} min</td>
                         <td class="text-center align-middle">{{ item.price }} ₺</td>
                         <td class="text-center align-middle">

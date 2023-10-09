@@ -1779,6 +1779,10 @@ pre code {
   .table-responsive-sm > .table-bordered {
     border: 0;
   }
+
+  .table tr, .table td, .table th{
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 767.98px) {
