@@ -59,7 +59,7 @@ export default {
         async onLogin()
         {
             this.isLoading  = true;
-            await this.$appAxios.post("/admin/login", this.userData).then(response => {
+            await this.$appAxios.post("/user/adminlogin", this.userData).then(response => {
                 var token = response?.data?.data?.token;
                 
                 if(token !== undefined)
