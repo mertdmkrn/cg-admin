@@ -604,7 +604,7 @@ export default {
         },
         async getBusiness(id)
         {
-            await this.$appAxios.post("/business/getallbyid", id, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+            await this.$appAxios.post("/business/getbyid", id, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
                 this.business = response.data.data;
                 if(this.business.workingInfos != null && this.business.workingInfos.length > 0)
                 {

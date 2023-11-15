@@ -209,7 +209,7 @@ export default {
             }
         },
         async getBusinessSelectList() {
-            await this.$appAxios.post("/business/selectlist", null, { headers: { "Authorization": `Bearer ${this._token}` } }).then(response => {
+            await this.$appAxios.post("/business/getnames", null, { headers: { "Authorization": `Bearer ${this._token}` } }).then(response => {
                 this.isLoading = false;
 
                 if(response.hasError == true || response.data.data == null)
