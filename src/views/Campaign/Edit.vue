@@ -7,7 +7,7 @@
                 <input v-show="!isLoading" class="file-upload" ref="file" type="file" accept="image/*" @change="previewFiles"/>
             </div>
             <div v-if="this.file != null" class="col-sm-2">
-                <button class="btn btn-success" style="float: right;" @click="fileUpload">Upload</button>
+                <a class="btn btn-success" style="float: right;" @click="fileUpload">Upload</a>
             </div>
         </div>
         <div class="form-group row">

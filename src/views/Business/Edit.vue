@@ -6,6 +6,7 @@
     <li><a data-toggle="tab" href="#gallery">GALLERY</a></li>
     <li><a data-toggle="tab" href="#personal">PERSONAL</a></li>
     <li><a data-toggle="tab" href="#properties">SETTINGS</a></li>
+    <li><a data-toggle="tab" href="#discount">DISCOUNTS</a></li>
   </ul>
   <ul class="d-flex d-lg-none nav nav-tabs" style="font-size: 21.5px;">
     <li class="active"><a data-toggle="tab" href="#generalinformation" class="active"><i class="fa-solid fa-circle-info"></i></a></li>
@@ -14,6 +15,7 @@
     <li><a data-toggle="tab" href="#gallery"><i class="fa-solid fa-images"></i></a></li>
     <li><a data-toggle="tab" href="#personal"><i class="fa-solid fa-user-tie"></i></a></li>
     <li><a data-toggle="tab" href="#properties"><i class="fa-solid fa-gears"></i></a></li>
+    <li><a data-toggle="tab" href="#discount"><i class="fa-solid fa-percent"></i></a></li>
   </ul>
 
   <div v-show="isLoading" class="loader"></div>
@@ -74,10 +76,6 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-inline col-md-3">
-                    <label for="discountRate" class="col-sm-3 px-0 text-left">Discount</label>
-                    <input type="number" v-model="business.discountRate" class="form-control col-sm-9" id="discountRate">
-                </div>
                 <div class="form-group col-md-2 ml-4 my-4">
                     <div class="form-check form-switch">
                         <input class="form-check-input" v-model="business.verified" type="checkbox" id="verified">
@@ -104,7 +102,7 @@
                 </div>
                 <div class="form-group col-md-12">
                     <div v-show="saveLoading" class="loader"></div>
-                    <a class="btn btn-primary d-md-block d-none float-right px-3" v-if="!saveLoading" style="margin-top: -57px;" @click="saveBusinessInfo()">Save</a>
+                    <a class="btn btn-primary d-md-block d-none float-right px-3" v-if="!saveLoading" style="margin-top: -57px; width: 20%;" @click="saveBusinessInfo()">Save</a>
                     <a class="btn btn-primary d-md-none d-block float-right py-2" v-if="!saveLoading" style="width: 100%;" @click="saveBusinessInfo()">Save</a>
                 </div>
             </div>
@@ -391,7 +389,7 @@
                     </div>
                     <div class="personal-info" style="height: 70px; padding: 10px;">
                         <strong>{{ item.name }}</strong> - <i>{{ item.title }}</i><br>
-                        <small> {{ getPersonalService(item.serviceIds) }}</small>
+                        <small> {{ getBusinessServiceNames(item.serviceIds) }}</small>
                     </div>
                 </div>
                 <a @click="item.serviceIdList = item.serviceIds.split(';'); editWorker = item" class="btn btn-warning" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 18px; top: 5px; text-align: center; padding: 5px; font-size: 14px; color: #fff;" data-toggle="modal" data-target="#editPersonalModal">
@@ -528,6 +526,104 @@
             </div>
         </div>
     </div>
+    <div id="discount" class="tab-pane fade">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>DescriptionEn</th>
+                        <th>Rate</th>
+                        <th>Type</th>
+                        <th>Services</th>
+                        <th>Active</th>
+                        <th style="width:40px"><a class="btn btn-success btn-user btn-block" @click="editDiscount = {}" data-toggle="modal" data-target="#editDiscountModal"><i class="fa-solid fa-plus"></i></a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in this.business.discounts" :key="item.id">
+                        <td class="text-center align-middle">{{ item.description }}</td>
+                        <td class="text-center align-middle">{{ item.descriptionEn }}</td>
+                        <td class="text-center align-middle">%{{ item.rate }}</td>
+                        <td class="text-center align-middle">{{ getDiscountTypeString(item.type) }}</td>
+                        <td class="text-center align-middle">{{ getServiceNames(item.serviceIds) }}</td>
+                        <td class="text-center align-middle">{{ item.isActive ? "YES" : "NO" }}</td>
+                        <td class="text-center align-middle">
+                            <a style="color: #FFBF00;" class="nav-link" @click="item.serviceIdList = item.serviceIds.split(';'); editDiscount = item" data-toggle="modal" data-target="#editDiscountModal">
+                                <i class="fa-solid fa-edit"></i>
+                            </a>
+                            <a style="color: #DE3163;" class="nav-link" @click="deleteDiscount(item.id)">
+                                <i class="fa-solid fa-trash"></i>
+                           </a>                                
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="editDiscountModal" tabindex="-1" role="dialog" aria-labelledby="editDiscountModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDiscountModalLabel">{{ editDiscount.id != null ? 'Edit' : 'Add' }} Discount</h5>
+                        <a type="a" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="type">Type</label>
+                                <select class="form-control" v-model="editDiscount.type">
+                                    <option value="0">All Days</option>
+                                    <option value="1">Week Days</option>
+                                    <option value="2">Week End</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rate">Rate</label>
+                                <input class="form-control" type="number" v-model="editDiscount.rate" min="1" max="100" id="rate">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                        <div class="col-md-12">
+                                <label for="service">Services</label>
+                                <select multiple class="form-control" v-model="editDiscount.serviceIdList">
+                                    <option v-for="item in this.services" :key="item.id" :value="item.id">
+                                        {{ item.nameEn }}
+                                    </option>
+                                </select>              
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="description">Description</label>
+                                <textarea v-model="editDiscount.description" class="form-control" id="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="descriptionEn">DescriptionEn</label>
+                                <textarea v-model="editDiscount.descriptionEn" class="form-control" id="descriptionEn"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 mx-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" v-model="editDiscount.isActive" type="checkbox" id="isActive">
+                                    <label class="form-check-label" for="isActive">Active</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div v-show="saveLoading" class="loader"></div>
+                        <a v-if="editDiscount.id == null && !saveLoading" class="btn btn-primary" @click="saveDiscount()">Save</a>
+                        <a v-else-if="editDiscount.id != null && !saveLoading" class="btn btn-warning" @click="saveDiscount()">Update</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -567,6 +663,7 @@ export default {
         officialHolidayAvailable : true
       },
       editService: {},
+      editDiscount: {},
       worker: {
         id: null,
         name: null,
@@ -948,10 +1045,10 @@ export default {
                 this.editWorker.path = e.target.result;
             }.bind(this);
         },
-        getPersonalService(serviceIds) {
-            if(this.business.services == null || this.business.services.length == 0) return null;
+        getBusinessServiceNames(serviceIds) {
+            if(this.business.services == null || this.business.services.length == 0) return "-";
 
-            if(serviceIds == null) return null;
+            if(serviceIds == null || serviceIds == "") return "-";
             
             var retval = "";
 
@@ -963,8 +1060,81 @@ export default {
 
             });
 
-            return retval.trimEnd(",");
+            return retval.trimEnd(' ').trimEnd(',');
         },
+        getServiceNames(serviceIds) {
+            if(this.services == null || this.services.length == 0) return "All Services";
+
+            if(serviceIds == null || serviceIds == "") return "All Services";
+            
+            var retval = "";
+
+            serviceIds.split(";").forEach(id => {
+                var service = this.services.find(x => x.id.toString() == id);
+                if(service)
+                {
+                    retval += service.nameEn;
+                    retval += ", ";
+                }
+            });
+
+            return retval.trimEnd(' ').trimEnd(',');
+        },
+        async saveDiscount()
+        {
+            this.saveLoading = true;
+            var isSave = this.editDiscount.id == null;
+
+            var requestUrl = isSave ? "/discount/save" : "/discount/update";
+            
+            if(isSave)
+            {
+                this.editDiscount.id = "00000000-0000-0000-0000-000000000000"
+            }
+                
+            this.editDiscount.businessId = this.business.id;
+            this.editDiscount.type = parseInt(this.editDiscount.type);
+            this.editDiscount.serviceIds = this.editDiscount.serviceIdList.join(";");
+
+            await this.$appAxios.post(requestUrl, this.editDiscount, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+
+                if(isSave)
+                {
+                    this.business.discounts.push(response.data.data);
+                }
+                else 
+                {
+                    var index = this.business.discounts.indexOf(x => x.id == this.editDiscount.id);
+                    this.business.discounts.splice(index, response.data.data);
+                }
+
+                $("#editDiscountModal").modal("hide");
+                this.saveLoading = false;
+                alert(response.data.message);
+
+            }).catch(e => { alert(e.message); this.saveLoading = false; });
+        },
+        async deleteDiscount(id)
+        {
+            if(confirm("Do you want to delete the record?!"))
+            {
+                await this.$appAxios.post("/discount/delete", id, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+                    this.saveLoading = false;
+                    alert(response.data.message);
+                    this.business.discounts = this.business.discounts.filter(x => x.id != id);
+                }).catch(e => { alert(e.message); this.saveLoading = false; });
+            }
+        },
+        getDiscountTypeString(type)
+        {
+            switch(type)
+            {
+                case 0 : return "All Days";
+                case 1 : return "Week Days";
+                case 2 : return  "Week End";
+                default : return "All Days";
+            }
+        }
     },
     computed: {
         ...mapGetters(["_token"]),
