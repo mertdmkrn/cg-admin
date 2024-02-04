@@ -58,7 +58,7 @@
     </form>
     <div class="row">
         <div class="col-sm-4" v-if="this.campaign.path != null">
-            <img :src="this.campaign.path" width="300" onerror="this.src = null" />
+            <img :src="this.campaign.path" width="300" loading="lazy" decoding="async" onerror="this.src = null" />
         </div>  
         <div class="col-sm-6 alert alert-danger" v-show="this.hasError" role="alert">
             <p v-for="alert in this.alerts">{{ alert }}</p>

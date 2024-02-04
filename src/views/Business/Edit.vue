@@ -342,7 +342,7 @@
                 <div v-if="item.isProfilePhoto" alt="Profile Photo" style="width: 65px; height:35px; background: #becd36; border-radius:5px; opacity: 0.7; position: absolute; right: 18px; bottom: 5px; text-align: center; padding: 6px; color: #fff;">
                     <i class="fa-solid fa-image"></i> PP
                 </div>
-                <img :src="item.imageUrl" style="width: 100%; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" class="thumbnail">
+                <img :src="item.imageUrl" style="width: 100%; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" loading="lazy" decoding="async" class="thumbnail">
             </div>
             <div class="col-md-12">
                 <a class="btn btn-success d-md-block d-none float-right px-3 py-1" data-toggle="modal" data-target="#editGalleryModal"><i class="fa-solid fa-plus"></i></a>
@@ -360,7 +360,7 @@
                     </div>
                     <div class="modal-body">
                         <div v-if="this.gallery.imageUrl == null" style="display: inline-block; width: 100%; height: 300px; background: #323233;"></div>
-                        <img v-else style="width:100%; height: 300px; display:inline-block; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" :src="this.gallery.imageUrl" />
+                        <img v-else style="width:100%; height: 300px; display:inline-block; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" loading="lazy" decoding="async" :src="this.gallery.imageUrl" />
 
                         <input class="file-upload mt-3" ref="file" type="file" accept="image/*" @change="previewFiles"/>
                         <br>
@@ -385,7 +385,7 @@
             <div v-for="item in this.business.workers" :key="item.id" class="col-md-3 mt-1 mb-2">
                 <div class="personal-card" style="height: auto; display: block; background: #fff; border-radius: 5px;">
                     <div class="thumbnail">
-                        <img :src="item.path" style="width: 100%; height: auto; object-fit: cover; border-top-right-radius: 5px; border-top-left-radius: 5px;">
+                        <img :src="item.path" style="width: 100%; height: auto; object-fit: cover; border-top-right-radius: 5px; border-top-left-radius: 5px;" loading="lazy" decoding="async">
                     </div>
                     <div class="personal-info" style="height: 70px; padding: 10px;">
                         <strong>{{ item.name }}</strong> - <i>{{ item.title }}</i><br>
@@ -416,7 +416,7 @@
                     <div class="modal-body">
                         <div style="width: 150px; height:150px; border-radius: 100%; overflow: auto; margin: 0 auto; position: relative; background: #ddd; text-align: center;">
                             <i v-if="this.editWorker.path == null" style="display: inline-block; font-size:80px; padding-top: 35px;" class="fa-solid fa-user"></i>
-                            <img v-else style="width:150px; height: 150px; object-fit:cover; display:inline-block" :src="this.editWorker.path" />
+                            <img v-else width="150" height="150" style="width:150px; height: 150px; object-fit:cover; display:inline-block" :src="this.editWorker.path" />
                         </div>
                         <a class="btn btn-primary" v-if="file2 != null" @click="fileUpload" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 35%; top: 120px; text-align: center; padding: 5px; font-size: 14px; color: #fff;">
                             <i class="fa-solid fa-upload"></i>

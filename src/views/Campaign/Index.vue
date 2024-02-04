@@ -16,7 +16,7 @@
                 </tr>
                 <tr v-for="campaign in this.campaigns" :key="campaign.id">
                     <td class="text-center align-middle">{{ campaign.sortOrder }}</td>
-                    <td class="text-center align-middle"><img :src="campaign.path" width="150" /></td>
+                    <td class="text-center align-middle"><img :src="campaign.path" width="150" loading="lazy" decoding="async" /></td>
                     <td class="text-center align-middle"><a class="nav-link" :href="campaign.url" target="_blank">{{ campaign.url }}</a></td>
                     <td class="text-center align-middle">{{ campaign.isActive ? 'YES' : 'NO' }}</td>
                     <td class="text-center align-middle">

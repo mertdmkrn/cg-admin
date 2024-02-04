@@ -3,7 +3,7 @@
         <div class="col-sm-12" style="display: table; text-align: center; margin: 0 auto">
             <div style="width: 200px; height:200px; border-radius: 100%; overflow: hidden; margin: 0 auto; position: relative; background: #ddd; text-align: center;">
                 <i v-if="this.user.imageUrl == null" style="display: inline-block; font-size:120px; padding-top: 35px;" class="fa-solid fa-user"></i>
-                <img v-else style="width:200px; height: 200px; display:inline-block" :src="this.user.imageUrl" />
+                <img v-else style="width:200px; height: 200px; display:inline-block" :src="this.user.imageUrl" loading="lazy" decoding="async" />
             </div>
 
             <input class="file-upload mt-3" ref="file" type="file" accept="image/*" @change="previewFiles"/>

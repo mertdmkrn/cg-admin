@@ -37,7 +37,7 @@
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ this.$store.state.user?.fullName }}</span>
-                    <img v-if="this.$store.state.user?.imageUrl != null" :src="this.$store.state.user?.imageUrl" width="35" style="border-radius: 17.5px;">
+                    <img v-if="this.$store.state.user?.imageUrl != null" :src="this.$store.state.user?.imageUrl" width="35" height="35" loading="lazy" decoding="async" style="border-radius: 17.5px;">
                     <i v-else class="fa-solid fa-user"></i>
                 </a>
                 <!-- Dropdown - User Information -->

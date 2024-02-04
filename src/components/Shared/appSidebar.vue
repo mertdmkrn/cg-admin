@@ -4,7 +4,7 @@
         <!-- Sidebar - Brand -->
         <router-link class="sidebar-brand d-flex align-items-center justify-content-center" to="/">
             <div class="sidebar-brand-icon rotate-n-1">
-                <img src="@/assets/img/logo.PNG" width="35" />
+                <img src="@/assets/img/logo.PNG" loading="lazy" decoding="async" width="35" height="35" />
             </div>
             <div class="sidebar-brand-text mx-2">CG ADMIN</div>
         </router-link>
