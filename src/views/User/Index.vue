@@ -70,9 +70,7 @@
                             <i v-else class="fa-solid fa-user" style="padding-top: 18px;"></i>
                         </div>                        
                     </td>
-                    <td class="text-center align-middle">
-                        <span style="padding: 5px;">{{ item.fullName }}</span>                
-                    </td>
+                    <td class="text-center align-middle">{{ item.fullName }}</td>
                     <td class="text-center align-middle">{{ item.city ?? "-" }}</td>
                     <td class="text-center align-middle">{{ $filters.formatDate(item.createDate) }}</td>
                     <td class="text-center align-middle">{{ genderList[item.gender] }}</td>
