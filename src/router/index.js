@@ -93,6 +93,21 @@ const routes = [
         path : "/faq/edit/:id",
         component : () => import("../views/Faq/Edit.vue")
     },
+    {
+        name : "SETTINGS",
+        path : "/settings",
+        component : () => import("../views/Setting/Index.vue")
+    },
+    {
+        name : "ADD SETTING",
+        path : "/setting/edit",
+        component : () => import("../views/Setting/Edit.vue")
+    },
+    {
+        name : "EDIT SETTING",
+        path : "/setting/edit/:id",
+        component : () => import("../views/Setting/Edit.vue")
+    },
 ]
 
 const router = createRouter({

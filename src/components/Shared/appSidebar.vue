@@ -77,6 +77,13 @@
             </router-link>
         </li>
 
+        <li class="nav-item" :class="this.$route.name == 'SETTINGS' ? 'active' : ''">
+            <router-link class="nav-link" to="/settings">
+                <i class="fa-solid fa-gears"></i>                
+                <span>SETTINGS</span>
+            </router-link>
+        </li>
+
         <hr class="sidebar-divider">
 
         <div class="text-center d-none d-md-inline">
