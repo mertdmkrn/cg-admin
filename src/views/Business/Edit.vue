@@ -832,6 +832,7 @@ export default {
                 formData.append("businessId", this.business.id);
                 formData.append("isProfilePhoto", this.editGallery.isProfilePhoto == undefined ? false : this.editGallery.isProfilePhoto);
                 formData.append("isSliderPhoto", this.editGallery.isSliderPhoto == undefined ? false : this.editGallery.isSliderPhoto);
+                formData.append("sortOrder", this.editGallery.sortOrder == undefined ? 1 : this.editGallery.sortOrder);
 
                 await this.$appAxios.post(requestUrl, formData, { headers: { "Authorization": `Bearer ${this._token}`, "Content-Type": "multipart/form-data" } }).then(response => {
                     
