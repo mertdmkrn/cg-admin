@@ -336,17 +336,23 @@
     <div id="gallery" class="tab-pane fade">
         <div class="row">
             <div v-for="item in this.business.galleries" :key="item.id" class="col-md-3 mt-1 mb-2">
-                <a class="btn btn-danger" @click="deleteGallery(item.id)" style="width: 35px; height:35px; border-radius:50%; position: absolute; right: 18px; top: 5px; text-align: center; padding: 6px; color: #fff;">
+                <a class="btn btn-danger" @click="deleteGallery(item.id)"  style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 18px; top: 38px; text-align: center; padding: 5px; font-size: 14px; color: #fff;">
                     <i class="fa fa-trash"></i>
                 </a>
-                <div v-if="item.isProfilePhoto" alt="Profile Photo" style="width: 65px; height:35px; background: #becd36; border-radius:5px; opacity: 0.7; position: absolute; right: 18px; bottom: 5px; text-align: center; padding: 6px; color: #fff;">
+                <a @click="editGallery = item" class="btn btn-warning"  style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 18px; top: 5px; text-align: center; padding: 5px; font-size: 14px; color: #fff;" data-toggle="modal" data-target="#editGalleryModal">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <div v-if="item.isProfilePhoto" title="Profile Photo" alt="Profile Photo" style="width: 65px; height:35px; background: #becd36; border-radius:5px; opacity: 0.7; position: absolute; right: 18px; bottom: 5px; text-align: center; padding: 6px; color: #fff;">
                     <i class="fa-solid fa-image"></i> PP
+                </div>
+                <div v-if="item.isSliderPhoto" title="Slider Photo" alt="Slider Photo" style="width: 65px; height:35px; background: #becd36; border-radius:5px; opacity: 0.7; position: absolute; left: 18px; bottom: 5px; text-align: center; padding: 6px; color: #fff;">
+                    <i class="fa-solid fa-image"></i> SP
                 </div>
                 <img :src="item.imageUrl" style="width: 100%; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" loading="lazy" decoding="async" class="thumbnail">
             </div>
             <div class="col-md-12">
-                <a class="btn btn-success d-md-block d-none float-right px-3 py-1" data-toggle="modal" data-target="#editGalleryModal"><i class="fa-solid fa-plus"></i></a>
-                <a class="btn btn-success d-md-none d-block float-right py-2" style="width: 100%;" data-toggle="modal" data-target="#editGalleryModal">ADD IMAGE</a>
+                <a class="btn btn-success d-md-block d-none float-right px-3 py-1" @click="editGallery = {}" data-toggle="modal" data-target="#editGalleryModal"><i class="fa-solid fa-plus"></i></a>
+                <a class="btn btn-success d-md-none d-block float-right py-2" @click="editGallery = {}" style="width: 100%;" data-toggle="modal" data-target="#editGalleryModal">ADD IMAGE</a>
             </div>
         </div>
         <div class="modal fade" id="editGalleryModal" tabindex="-1" role="dialog" aria-labelledby="editGalleryModalLabel" aria-hidden="true">
@@ -359,22 +365,35 @@
                         </a>
                     </div>
                     <div class="modal-body">
-                        <div v-if="this.gallery.imageUrl == null" style="display: inline-block; width: 100%; height: 300px; background: #323233;"></div>
-                        <img v-else style="width:100%; height: 300px; display:inline-block; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" loading="lazy" decoding="async" :src="this.gallery.imageUrl" />
+                        <div class="col-md-12">
+                            <div v-if="editGallery.imageUrl == null" style="display: inline-block; width: 100%; height: 300px; background: #323233;"></div>
+                            <img v-else style="width:100%; height: 300px; display:inline-block; border-radius: 5px; aspect-ratio:16/9; object-fit:cover;" loading="lazy" decoding="async" :src="this.editGallery.imageUrl" />
 
-                        <input class="file-upload mt-3" ref="file" type="file" accept="image/*" @change="previewFiles"/>
-                        <br>
+                            <input v-if="editGallery.id == null" class="file-upload mt-3" ref="file" type="file" accept="image/*" @change="previewFiles"/>
+                        </div>
+                   
+                        <div class="form-group col-md-12 mt-3">
+                            <label for="sortOrder">Sort Order</label>                  
+                            <input type="number" class="form-control" v-model="editGallery.sortOrder" id="sortOrder">
+                        </div>
 
-                        <div v-if="!this.profilePhotoAvailable" class="form-group col-md-12 ml-4">
+                        <div v-if="!this.profilePhotoAvailable" class="form-group col-md-5 ml-4">
                             <div class="form-check form-switch">                       
-                                <input class="form-check-input" v-model="this.gallery.isProfilePhoto" type="checkbox" id="officialdayavailable">
+                                <input class="form-check-input" v-model="editGallery.isProfilePhoto" type="checkbox" id="isProfilePhoto">
                                 <label class="form-check-label" for="isProfilePhoto">Profile Photo</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5 ml-4">
+                            <div class="form-check form-switch">                       
+                                <input class="form-check-input" v-model="editGallery.isSliderPhoto" type="checkbox" id="isSliderPhoto">
+                                <label class="form-check-label" for="isSliderPhoto">Slider Photo</label>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div v-show="saveLoading" class="loader"></div>
-                        <a v-if="this.gallery.imageUrl != null && !saveLoading" @click="saveGallery()" class="btn btn-primary">Save</a>
+                        <a @click="saveGallery()" v-if="editGallery.id == null && editGallery.imageUrl != null && !saveLoading" class="btn btn-primary">Save</a>
+                        <a @click="saveGallery()" v-else-if="editGallery.imageUrl != null && !saveLoading" class="btn btn-warning">Update</a>
                     </div>
                 </div>
             </div>
@@ -537,6 +556,7 @@
                         <th>Type</th>
                         <th>Services</th>
                         <th>Active</th>
+                        <th>Color</th>
                         <th style="width:40px"><a class="btn btn-success btn-user btn-block" @click="editDiscount = {}" data-toggle="modal" data-target="#editDiscountModal"><i class="fa-solid fa-plus"></i></a></th>
                     </tr>
                 </thead>
@@ -548,6 +568,7 @@
                         <td class="text-center align-middle">{{ getDiscountTypeString(item.type) }}</td>
                         <td class="text-center align-middle">{{ getServiceNames(item.serviceIds) }}</td>
                         <td class="text-center align-middle">{{ item.isActive ? "YES" : "NO" }}</td>
+                        <td class="text-center align-middle"><span style="padding: 5px; color: #fff;" :style="{backgroundColor: item.colorCode }">{{ item.colorCode }}</span></td>
                         <td class="text-center align-middle">
                             <a style="color: #FFBF00;" class="nav-link" @click="item.serviceIdList = item.serviceIds.split(';'); editDiscount = item" data-toggle="modal" data-target="#editDiscountModal">
                                 <i class="fa-solid fa-edit"></i>
@@ -605,6 +626,14 @@
                                 <label for="descriptionEn">DescriptionEn</label>
                                 <textarea v-model="editDiscount.descriptionEn" class="form-control" id="descriptionEn"></textarea>
                             </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-10">
+                                    <input type="text" class="form-control" id="colorCode" v-model="editDiscount.colorCode">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="color" :style="{backgroundColor : `${editDiscount.colorCode}`}" v-model="editDiscount.colorCode" class="form-control">
+                                </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-4 mx-4">
@@ -676,10 +705,7 @@ export default {
       },
       editWorker: {},
       editProperties: {},
-      gallery: {
-        imageUrl: null,
-        isProfilePhoto: false
-      },
+      editGallery: {},
       services: [],
       file: null,
       file2: null,
@@ -795,22 +821,37 @@ export default {
         async saveGallery()
         {
             this.saveLoading = true;
-            var requestUrl = this.gallery.isProfilePhoto ? "/business/setprofilephoto" : "/business/addgalleryphoto";
+            var isSave = this.editGallery.id == null;
 
-            this.gallery = { imageUrl: null, isProfilePhoto: false };
-            
-            const formData = new FormData();
-            formData.append("file", this.file);
-            formData.append("businessId", this.business.id);
+            var requestUrl = isSave ? "/business/addGalleryPhoto" : "/business/updateGalleryPhoto";
 
-            await this.$appAxios.post(requestUrl, formData, { headers: { "Authorization": `Bearer ${this._token}`, "Content-Type": "multipart/form-data" } }).then(response => {
-                
-                $("#editGalleryModal").modal("hide");
-                this.saveLoading = false;
-                alert(response.data.message);
-                this.business.galleries.push(response.data.data);
+            if(isSave)
+            {
+                const formData = new FormData();
+                formData.append("file", this.file);
+                formData.append("businessId", this.business.id);
+                formData.append("isProfilePhoto", this.editGallery.isProfilePhoto == undefined ? false : this.editGallery.isProfilePhoto);
+                formData.append("isSliderPhoto", this.editGallery.isSliderPhoto == undefined ? false : this.editGallery.isSliderPhoto);
 
-            }).catch(e => { alert(e.message); this.saveLoading = false; });
+                await this.$appAxios.post(requestUrl, formData, { headers: { "Authorization": `Bearer ${this._token}`, "Content-Type": "multipart/form-data" } }).then(response => {
+                    
+                    $("#editGalleryModal").modal("hide");
+                    this.saveLoading = false;
+                    alert(response.data.message);
+                    this.business.galleries.push(response.data.data);
+
+                }).catch(e => { alert(e.message); this.saveLoading = false; });
+            }
+            else
+            {
+                await this.$appAxios.post(requestUrl, this.editGallery, { headers: { "Authorization": `Bearer ${this._token}`} }).then(response => {
+                    
+                    $("#editGalleryModal").modal("hide");
+                    this.saveLoading = false;
+                    alert(response.data.message);
+
+                }).catch(e => { alert(e.message); this.saveLoading = false; });
+            }
         },
         async deleteGallery(id)
         {
@@ -1034,7 +1075,7 @@ export default {
             var reader = new FileReader();
             reader.readAsDataURL(this.file);
             reader.onload = function (e) {
-                this.gallery.imageUrl = e.target.result;
+                this.editGallery.imageUrl = e.target.result;
             }.bind(this);
         },
         previewFiles2() {
