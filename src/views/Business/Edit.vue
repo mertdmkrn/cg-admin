@@ -23,17 +23,22 @@
     <div id="generalinformation" class="tab-pane fade in active show">
         <form>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="name">Name</label>
                     <input type="text" v-model="business.name" class="form-control" id="name" placeholder="X Hair Studio">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="telephone">Telephone</label>
                     <input type="text" v-model="business.telephone" class="form-control" id="telephone" placeholder="+905000000000">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <label for="email">E-Mail</label>
                     <input type="email" v-model="business.email" class="form-control" id="email" placeholder="business@gmail.com">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="logo">Logo Url</label>
+                    <input disabled type="text" v-model="business.logoUrl" class="form-control" id="logo">
+                    <a class="btn btn-sm btn-success" style="position: absolute; right: 10px; bottom:4px;" data-toggle="modal" data-target="#editLogoModal"><i class="fa-solid fa-upload"></i></a>
                 </div>
             </div>
             <div class="form-row">
@@ -104,6 +109,28 @@
                     <div v-show="saveLoading" class="loader"></div>
                     <a class="btn btn-primary d-md-block d-none float-right px-3" v-if="!saveLoading" style="margin-top: -57px; width: 20%;" @click="saveBusinessInfo()">Save</a>
                     <a class="btn btn-primary d-md-none d-block float-right py-2" v-if="!saveLoading" style="width: 100%;" @click="saveBusinessInfo()">Save</a>
+                </div>
+            </div>
+            <div class="modal fade" id="editLogoModal" tabindex="-1" role="dialog" aria-labelledby="editLogoModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editLogoModalLabel">Edit Logo</h5>
+                            <a type="a" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </a>
+                        </div>
+                        <div class="modal-body">
+                            <div style="width: 128px; height:128px; border-radius: 100%; overflow: auto; margin: 0 auto; position: relative; background: #ddd; text-align: center;">
+                                <i v-if="!business.logoUrl" style="display: inline-block; font-size:50px; padding-top: 27px;" class="fa-solid fa-image"></i>
+                                <img v-else width="128" height="128" style="width:128px; height: 128px; object-fit:cover; display:inline-block" :src="business.logoUrl" />
+                            </div>
+                            <a class="btn btn-primary" v-if="logoFile != null" @click="fileUpload(true)" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 35%; top: 120px; text-align: center; padding: 5px; font-size: 14px; color: #fff;">
+                                <i class="fa-solid fa-upload"></i>
+                            </a>
+                            <input class="file-upload mt-3" ref="logoFile" type="file" accept="image/*" @change="previewFiles3"/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -709,6 +736,7 @@ export default {
       services: [],
       file: null,
       file2: null,
+      logoFile: null,
       isLoading: true,
       saveLoading: false,
       serviceIds: null
@@ -737,11 +765,15 @@ export default {
                 this.isLoading = false;
             }).catch(e => { alert(e.message); this.$router.push({ path: "/businesses" }); });
         },
-        async fileUpload() {
-            this.saveLoading = true;
+        async fileUpload(logoFile = false) {
+
+            if(!logoFile)
+            {
+                this.saveLoading = true;
+            }
 
             const formData = new FormData();
-            formData.append("file", this.file2)
+            formData.append("file", logoFile ? this.logoFile : this.file2)
 
             await this.$appAxios.post("/admin/uploadfile", formData, { headers: { "Authorization": `Bearer ${this._token}`, "Content-Type": "multipart/form-data" } }).then(response => {
                 this.saveLoading = false;
@@ -753,8 +785,17 @@ export default {
                     alert(response.message);
                 }
                 else{
-                    this.editWorker.path = response.data;
-                    this.file2 = null;
+                    if(logoFile)
+                    {
+                        this.business.logoUrl = response.data;
+                        this.logoFile = null;
+                        $("#editLogoModal").modal("hide");
+                    }
+                    else
+                    {
+                        this.editWorker.path = response.data;
+                        this.file2 = null;
+                    }
                 }  
                     
                 }).catch(e => {alert("Error : " + e.message); this.saveLoading = false; });
@@ -1085,6 +1126,14 @@ export default {
             reader.readAsDataURL(this.file2);
             reader.onload = function (e) {
                 this.editWorker.path = e.target.result;
+            }.bind(this);
+        },
+        previewFiles3() {
+            this.logoFile = this.$refs.logoFile.files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(this.logoFile);
+            reader.onload = function (e) {
+                this.business.logoUrl = e.target.result;
             }.bind(this);
         },
         getBusinessServiceNames(serviceIds) {
