@@ -122,7 +122,7 @@
                         </div>
                         <div class="modal-body">
                             <div style="width: 128px; height:128px; border-radius: 100%; overflow: auto; margin: 0 auto; position: relative; background: #ddd; text-align: center;">
-                                <i v-if="!business.logoUrl" style="display: inline-block; font-size:50px; padding-top: 27px;" class="fa-solid fa-image"></i>
+                                <i v-if="!business.logoUrl" style="display: inline-block; font-size:60px; padding-top: 35px;" class="fa-solid fa-image"></i>
                                 <img v-else width="128" height="128" style="width:128px; height: 128px; object-fit:cover; display:inline-block" :src="business.logoUrl" />
                             </div>
                             <a class="btn btn-primary" v-if="logoFile != null" @click="fileUpload(true)" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 35%; top: 120px; text-align: center; padding: 5px; font-size: 14px; color: #fff;">
@@ -991,14 +991,17 @@ export default {
 
             await this.$appAxios.post(requestUrl, this.editProperties, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
 
-                if(isSave)
+                if(!response.hasError)
                 {
-                    this.business.properties.push(response.data.data);
-                }
-                else 
-                {
-                    var index = this.business.properties.indexOf(x => x.id == this.editService.id);
-                    this.business.properties.splice(index, response.data.data);
+                    if(isSave)
+                    {
+                        this.business.properties.push(response.data.data);
+                    }
+                    else 
+                    {
+                        var index = this.business.properties.indexOf(x => x.id == this.editService.id);
+                        this.business.properties.splice(index, response.data.data);
+                    } 
                 }
 
                 $("#editPropertiesModal").modal("hide");
