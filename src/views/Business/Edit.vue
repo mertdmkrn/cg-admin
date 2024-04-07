@@ -433,7 +433,7 @@
                     <div class="thumbnail">
                         <img :src="item.path" style="width: 100%; height: auto; object-fit: cover; border-top-right-radius: 5px; border-top-left-radius: 5px;" loading="lazy" decoding="async">
                     </div>
-                    <div class="personal-info" style="height: 70px; padding: 10px;">
+                    <div class="personal-info" style="height: auto; min-height: 90px; padding: 10px;">
                         <strong>{{ item.name }}</strong> - <i>{{ item.title }}</i><br>
                         <small> {{ getBusinessServiceNames(item.serviceIds) }}</small>
                     </div>
@@ -1147,14 +1147,12 @@ export default {
             var retval = "";
 
             serviceIds.split(";").forEach(id => {
-
                 var service = this.business.services.find(x => x.id.toString() == id);
                 retval += service.nameEn;
                 retval += ", ";
-
             });
-
-            return retval.trimEnd(' ').trimEnd(',');
+            
+            return retval.slice(0, -2) + ".";
         },
         getServiceNames(serviceIds) {
             if(this.services == null || this.services.length == 0) return "All Services";
@@ -1172,7 +1170,7 @@ export default {
                 }
             });
 
-            return retval.trimEnd(' ').trimEnd(',');
+            return retval.slice(0, -2) + ".";
         },
         async saveDiscount()
         {

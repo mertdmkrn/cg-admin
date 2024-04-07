@@ -6,18 +6,22 @@
                     <th>Order</th>
                     <th>Image</th>
                     <th>Url</th>
+                    <th>Title</th>
+                    <th>TitleEn</th>
                     <th>Active</th>
                     <th style="width:40px"><router-link to="/campaign/edit" class="btn btn-success btn-user btn-block"><i class="fa-solid fa-plus"></i></router-link></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-show="isLoading">
-                    <td class="align-middle" colspan="5"><div class="loader"></div></td> 
+                    <td class="align-middle" colspan="7"><div class="loader"></div></td> 
                 </tr>
                 <tr v-for="campaign in this.campaigns" :key="campaign.id">
                     <td class="text-center align-middle">{{ campaign.sortOrder }}</td>
                     <td class="text-center align-middle"><img :src="campaign.path" width="150" loading="lazy" decoding="async" /></td>
                     <td class="text-center align-middle"><a class="nav-link" :href="campaign.url" target="_blank">{{ campaign.url }}</a></td>
+                    <td class="text-center align-middle">{{ campaign.title }}</td>
+                    <td class="text-center align-middle">{{ campaign.titleEn }}</td>
                     <td class="text-center align-middle">{{ campaign.isActive ? 'YES' : 'NO' }}</td>
                     <td class="text-center align-middle">
                         <router-link class="nav-link" :to="'/campaign/edit/' + campaign.id" >

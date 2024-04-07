@@ -24,6 +24,39 @@
             </div>
         </div>
         <div class="form-group row">
+            <label for="path" class="col-sm-2 col-form-label">Title / TitleEn</label>
+            <div class="col-sm-5">
+                <input type="text" v-model="this.campaign.title" class="form-control" id="title" placeholder="Title">
+            </div>
+            <div class="col-sm-5">
+                <input type="text" v-model="this.campaign.titleEn" class="form-control" id="titleEn" placeholder="TitleEn">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="path" class="col-sm-2 col-form-label">About / AboutEn</label>
+            <div class="col-sm-5">
+                <input type="text" v-model="this.campaign.about" class="form-control" id="about" placeholder="About">
+            </div>
+            <div class="col-sm-5">
+                <input type="text" v-model="this.campaign.aboutEn" class="form-control" id="aboutEn" placeholder="AboutEn">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="path" class="col-sm-2 col-form-label">Condition / ConditionEn</label>
+            <div class="col-sm-5">
+                <input type="text" v-model="this.campaign.condition" class="form-control" id="condition" placeholder="Condition">
+            </div>
+            <div class="col-sm-5">
+                <input type="text" v-model="this.campaign.conditionEn" class="form-control" id="conditionEn" placeholder="ConditionEn">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="path" class="col-sm-2 col-form-label">Image Url</label>
+            <div class="col-sm-10">
+                <input type="text" v-model="this.campaign.path" class="form-control" id="path" placeholder="Image Url">
+            </div>
+        </div>
+        <div class="form-group row">
             <label for="path" class="col-sm-2 col-form-label">Image Url</label>
             <div class="col-sm-10">
                 <input type="text" v-model="this.campaign.path" class="form-control" id="path" placeholder="Image Url">
