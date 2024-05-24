@@ -438,7 +438,7 @@
                         <small> {{ getBusinessServiceNames(item.serviceIds) }}</small>
                     </div>
                 </div>
-                <a @click="item.serviceIdList = item.serviceIds.split(';'); editWorker = item" class="btn btn-warning" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 18px; top: 5px; text-align: center; padding: 5px; font-size: 14px; color: #fff;" data-toggle="modal" data-target="#editPersonalModal">
+                <a @click="item.serviceIdList = item.serviceIds.split(';'); editWorker = item; getWorkerServicePrices(item.id);" class="btn btn-warning" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 18px; top: 5px; text-align: center; padding: 5px; font-size: 14px; color: #fff;" data-toggle="modal" data-target="#editPersonalModal">
                     <i class="fa fa-edit"></i>
                 </a>
                 <a @click="deleteWorker(item.id)" class="btn btn-danger" style="width: 30px; height:30px; border-radius:50%; position: absolute; right: 18px; top: 38px; text-align: center; padding: 5px; font-size: 14px; color: #fff;">
@@ -502,6 +502,41 @@
                                     <input class="form-check-input" v-model="editWorker.isAvailable" type="checkbox" id="active">
                                     <label class="form-check-label" for="active">Available</label>
                                 </div>                 
+                            </div>
+                        </div>
+                        <div v-if="editWorker.id != null && editWorker.serviceIdList" class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Special Prices</h5>
+                                    <div class="list-wrapper table-responsive">
+                                        <table class="table table-sm table-striped">
+                                            <th style="width: 55%;">
+                                                <select class="form-control" v-model="workerServicePrice.businessServiceId">
+                                                    <option v-for="item in this.business.services.filter(x => editWorker.serviceIdList.includes(x.id))" :key="item.id" :value="item.id">
+                                                        {{ item.nameEn }} - {{ item.price }}
+                                                    </option>
+                                                </select>  
+                                            </th>
+                                            <th>
+                                                <input type="number" v-model="workerServicePrice.price" class="form-control" id="price" placeholder="Price">
+                                            </th>
+                                            <th>
+                                                <a class="add btn btn-primary font-weight-bold todo-list-add-btn" @click="saveWorkerServicePrice()" style="width: 100%;"><i class="fa-solid fa-plus"></i></a>
+                                            </th>
+                                            <tbody>
+                                                <tr v-for="item in workerServicePrices" :key="item.id">
+                                                    <td class="text-center align-middle">{{ getBusinessServiceNames(item.businessServiceId) }}</td>
+                                                    <td class="text-center align-middle">{{ item.price }}</td>
+                                                    <td class="text-center align-middle">
+                                                        <a style="color: #DE3163;" @click="deleteWorkerServicePrice(item.id)" class="nav-link">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </a>                                           
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -733,6 +768,8 @@ export default {
       editWorker: {},
       editProperties: {},
       editGallery: {},
+      workerServicePrice: {},
+      workerServicePrices: [],
       services: [],
       file: null,
       file2: null,
@@ -1021,6 +1058,14 @@ export default {
                 }).catch(e => { alert(e.message); this.saveLoading = false; });
             }
         },
+        async getWorkerServicePrices(workerId)
+        {
+            var searchObj = { id: "00000000-0000-0000-0000-000000000000", workerId: workerId };
+            await this.$appAxios.post("/workerserviceprice/search", searchObj, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+                this.workerServicePrices = response.data.data;
+             }).catch(e => { alert(e.message); this.saveLoading = false; });
+            
+        },
         setWorkingInput(workingInfo)
         {
             console.log(workingInfo);
@@ -1113,6 +1158,52 @@ export default {
                 this.workingInfo.sundayOpen = true;
                 this.workingInfo.sundayStartHour = workingInfo.sundayWorkHours.split('-')[0];
                 this.workingInfo.sundayEndHour = workingInfo.sundayWorkHours.split('-')[1];
+            }
+        },
+        async saveWorkerServicePrice()
+        {
+            this.saveLoading = true;
+
+            this.workerServicePrice.workerId = this.editWorker.id;
+
+            var services = this.business.services.filter(x => x.id === this.workerServicePrice.businessServiceId);
+
+            if(services && services[0].price >= this.workerServicePrice.price)
+            {
+                alert(`Special price must be higher than service price. Price: ${services[0].price}`);
+                this.saveLoading = false;
+                return;
+            }
+
+            if(this.workerServicePrices && this.workerServicePrices.filter(x => x.businessServiceId === this.workerServicePrice.businessServiceId).length > 0)
+            {
+                alert("The price for this service has been predefined.");
+                this.saveLoading = false;
+                return;
+            }
+
+            await this.$appAxios.post("/workerserviceprice/save", this.workerServicePrice, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+                debugger;
+                if(!response.data.hasError)
+                {
+                    this.workerServicePrices.push(response.data.data);   
+                    this.workerServicePrice = {};                
+                }
+
+                alert(response.data.message);
+                this.saveLoading = false;
+
+            }).catch(e => { alert(e.message); this.saveLoading = false; });
+        },
+        async deleteWorkerServicePrice(id)
+        {
+            if(confirm("Do you want to delete the record?!"))
+            {
+                await this.$appAxios.post("/workerserviceprice/delete", id, {headers: { 'Authorization': `Bearer ${this._token}`}}).then(response => {
+                    this.saveLoading = false;
+                    alert(response.data.message);
+                    this.workerServicePrices = this.workerServicePrices.filter(x => x.id != id);
+                }).catch(e => { alert(e.message); this.saveLoading = false; });
             }
         },
         previewFiles() {
