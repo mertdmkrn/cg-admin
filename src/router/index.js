@@ -29,9 +29,9 @@ const routes = [
         component : () => import("../views/Payment/Index.vue")
     },
     {
-        name : "RATINGS",
-        path : "/ratings",
-        component : () => import("../views/Rating/Index.vue")
+        name : "APPOINTMENTS",
+        path : "/appointments",
+        component : () => import("../views/Appointment/Index.vue")
     },
     {
         name : "USERS",

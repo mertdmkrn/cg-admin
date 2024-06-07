@@ -38,6 +38,11 @@ app.config.globalProperties.$filters = {
             return moment(String(date)).format('DD/MM/YYYY')
         }     
      },
+     formatDateAndHour(date) {
+        if (date) {
+            return moment(String(date)).format('DD/MM/YYYY hh:mm')
+        }     
+     },
 }
 
 app.mount('#app');

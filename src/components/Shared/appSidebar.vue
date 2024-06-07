@@ -42,10 +42,10 @@
             </router-link>
         </li>
 
-        <li class="nav-item" :class="this.$route.name == 'RATINGS' ? 'active' : ''">
-            <router-link class="nav-link" to="/ratings">
-                <i class="fa-solid fa-star"></i>
-                <span>RATINGS</span>
+        <li class="nav-item" :class="this.$route.name == 'APPOINTMENTS' ? 'active' : ''">
+            <router-link class="nav-link" to="/appointments">
+                <i class="fa-solid fa-calendar"></i>
+                <span>APPOINTMENTS</span>
             </router-link>
         </li>
 
