@@ -6,8 +6,7 @@ import VueBodyClass from 'vue-body-class';
 import { appAxios } from './utils/appAxios';
 import Pagination from 'v-pagination-3';
 import moment from 'moment';
-
-
+import 'moment-timezone';
 
 import './assets/css/bootstrap.min.css';
 import './assets/css/cg-admin.css';
@@ -35,14 +34,14 @@ router.beforeEach((to, from, next) => { vueBodyClass.guard(to, next) });
 app.config.globalProperties.$filters = {
     formatDate(date) {
         if (date) {
-            return moment(String(date)).format('DD/MM/YYYY')
-        }     
-     },
-     formatDateAndHour(date) {
+            return moment.tz(String(date), 'Europe/Istanbul').format('DD/MM/YYYY');
+        }
+    },
+    formatDateAndHour(date) {
         if (date) {
-            return moment(String(date)).format('DD/MM/YYYY hh:mm')
-        }     
-     },
+            return moment.tz(String(date), 'Europe/Istanbul').format('DD/MM/YYYY HH:mm');
+        }
+    },
 }
 
 app.mount('#app');
