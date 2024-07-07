@@ -49,6 +49,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>NameForUrl</th>
                     <th>City - Province</th>
                     <th>Created Date</th>
                     <th>Gender</th>
@@ -58,10 +59,11 @@
             </thead>
             <tbody>
                 <tr v-show="isLoading">
-                   <td class="align-middle" colspan="8"><div class="loader"></div></td> 
+                   <td class="align-middle" colspan="7"><div class="loader"></div></td> 
                 </tr>
                 <tr v-for="item in this.businesses" :key="item.id">
                     <td class="text-center align-middle">{{ item.name }}</td>
+                    <td class="text-center align-middle">{{ item.nameForUrl }}</td>
                     <td class="text-center align-middle">{{ item.city }} - {{ item.province }}</td>
                     <td class="text-center align-middle">{{ $filters.formatDate(item.createDate) }}</td>
                     <td class="text-center align-middle">{{ workingGenderTypeList[item.workingGenderType] }}</td>
