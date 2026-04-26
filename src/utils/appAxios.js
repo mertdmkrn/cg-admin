@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const appAxios = axios.create({
-    baseURL: "https://uninterested-nerta-caregarden37-894fa251.koyeb.app",
+    baseURL: "https://mere-gates-mertdmkrn-f8d7a756.koyeb.app",
     headers: {
       "Content-Type": "application/json",
       "Language" : "tr"
